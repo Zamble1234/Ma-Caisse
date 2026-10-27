@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ma Caisse</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#1d2b24">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ma Caisse">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="icon" href="./icon-192.png">
+<style>
+:root{--bg:#f6f1e7;--card:#fffdf8;--ink:#1d2b24;--mute:#6b756f;--in:#1f8a4c;--out:#c8382b;--line:#e2dac8;--accent:#1d2b24;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14201a;--card:#1e2d25;--ink:#f3efe4;--mute:#a1ada5;--in:#4cc27d;--out:#f0675a;--line:#2f4238;--accent:#f3efe4;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14201a;--card:#1e2d25;--ink:#f3efe4;--mute:#a1ada5;--in:#4cc27d;--out:#f0675a;--line:#2f4238;--accent:#f3efe4;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS","Segoe UI",Verdana,sans-serif;font-size:18px}
+#app{max-width:520px;margin:0 auto;padding:14px 14px 40px}
+#pub{max-width:520px;margin:0 auto 12px;padding:0 14px;text-align:center;overflow:hidden}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.top h1{font-size:24px;margin:0;flex:1}
+.round{width:56px;height:56px;border-radius:50%;background:var(--card);border:2px solid var(--line);font-size:28px;flex:none}
+.fund{display:flex;align-items:center;gap:14px;width:100%;background:var(--card);border:2px solid var(--line);border-radius:22px;padding:16px;margin-bottom:12px;text-align:left}
+.fund .ic{font-size:44px}
+.fund .nm{font-size:20px;font-weight:700}
+.big{font-size:30px;font-weight:800}
+.pos{color:var(--in)}.neg{color:var(--out)}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:76px;border-radius:22px;font-size:24px;font-weight:800;color:#fff}
+.btn.in{background:var(--in)}.btn.out{background:var(--out)}.btn.ok{background:var(--in)}
+.btn.add{background:var(--accent);color:var(--bg)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.btn .e{font-size:38px}
+.balance{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:18px;text-align:center}
+.balance .big{font-size:42px;margin:4px 0}
+.tx{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:12px;margin-bottom:10px}
+.tx .ic{font-size:34px;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;flex:none}
+.tx .ic.in{background:color-mix(in srgb,var(--in) 18%,transparent)}.tx .ic.out{background:color-mix(in srgb,var(--out) 18%,transparent)}
+.tx .m{flex:1;min-width:0}.tx .a{font-weight:800;font-size:20px}.tx .d{color:var(--mute);font-size:14px}
+.tx .p{font-size:22px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cat{background:var(--card);border:3px solid var(--line);border-radius:22px;padding:14px 6px;text-align:center;font-weight:700;font-size:17px}
+.cat .e{display:block;font-size:46px;margin-bottom:4px}
+.cat.sel{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--card))}
+.amt{background:var(--card);border:3px solid var(--line);border-radius:22px;text-align:center;padding:14px;margin-bottom:12px}
+.amt .big{font-size:48px;min-height:58px}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.key{min-height:70px;border-radius:18px;background:var(--card);border:2px solid var(--line);font-size:32px;font-weight:800}
+.steps{display:flex;gap:8px;margin-bottom:14px}
+.steps i{flex:1;height:10px;border-radius:6px;background:var(--line)}.steps i.on{background:var(--accent)}
+.hint{text-align:center;color:var(--mute);margin:8px 0 14px}
+.proof{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.proof .cat.done{border-color:var(--in)}
+textarea,input[type=text]{width:100%;font:inherit;font-size:18px;padding:14px;border-radius:16px;border:2px solid var(--line);background:var(--card);color:var(--ink)}
+.pic{width:100%;max-height:200px;object-fit:cover;border-radius:16px;margin-bottom:12px}
+.warn{background:color-mix(in srgb,var(--out) 14%,var(--card));border:2px solid var(--out);border-radius:16px;padding:12px;text-align:center;font-weight:700;margin-bottom:12px}
+.back{background:none;font-size:20px;font-weight:700;padding:10px 4px;color:var(--mute)}
+.cur{font-size:22px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<!-- EMPLACEMENT PUB : bandeau en bas de page, loin des boutons.
+     Collez ici le code fourni par Google AdSense quand votre compte est validé. -->
+<div id="pub"></div>
+<script>
+var KEY="caisse_v1",S={funds:[]},V={page:"home",fid:null,d:null,rec:null};
+var CATS_OUT=[["🍚","Nourriture"],["🚌","Transport"],["💊","Santé"],["🎓","École"],["🏠","Loyer"],["🛠️","Outils"],["👥","Aide"],["❓","Autre"]];
+var CATS_IN=[["🤝","Don"],["💵","Cotisation"],["🛒","Vente"],["🏦","Banque"],["❓","Autre"]];
+var ICONS=["👥","⛪","🏫","🌾","🏥","🏠"],CURS=["FCFA","$","€","FC"];
+try{var raw=localStorage.getItem(KEY);if(raw)S=JSON.parse(raw)}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));return true}catch(e){alert("⚠️ Mémoire pleine. Pas de photo/voix cette fois.");return false}}
+function fund(){return S.funds.filter(function(f){return f.id===V.fid})[0]}
+function bal(f){return f.tx.reduce(function(s,t){return s+(t.type==="in"?t.amt:-t.amt)},0)}
+function fmt(n,c){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")+" "+(c||"")}
+function say(t){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";speechSynthesis.speak(u)}catch(e){}}
+function go(p,x){V.page=p;if(x!==undefined)V.fid=x;window.scrollTo(0,0);draw()}
+function esc(s){return (s||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function dt(ts){var d=new Date(ts);return d.toLocaleDateString("fr-FR",{day:"numeric",month:"short"})+" "+d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})}
+
+function draw(){var a=document.getElementById("app");a.innerHTML=({home:home,fund:fundPage,new:newFund,add:addPage})[V.page]()}
+
+function home(){
+ var h='<div class="top"><h1>💰 Mes caisses</h1><button class="round" onclick="say(\'Vous avez \'+S.funds.length+\' caisses\')">🔊</button></div>';
+ if(!S.funds.length)h+='<p class="hint">Appuie sur le bouton pour créer ta première caisse 👇</p>';
+ S.funds.forEach(function(f){var b=bal(f);h+='<button class="fund" onclick="go(\'fund\',\''+f.id+'\')"><span class="ic">'+f.icon+'</span><span style="flex:1"><div class="nm">'+esc(f.name)+'</div><div class="big '+(b<0?"neg":"pos")+'">'+fmt(b,f.cur)+'</div></span><span style="font-size:30px">›</span></button>'});
+ return h+'<button class="btn add" onclick="newF()"><span class="e">➕</span> Nouvelle caisse</button>';
+}
+
+function newF(){V.d={name:"",icon:"👥",cur:"FCFA"};go("new")}
+function newFund(){
+ var d=V.d,h='<button class="back" onclick="go(\'home\')">‹ Retour</button><h1 style="margin:6px 0 14px">Nouvelle caisse</h1>';
+ h+='<input type="text" id="nm" placeholder="Nom de la caisse" value="'+esc(d.name)+'" oninput="V.d.name=this.value"><p class="hint">Choisis une image</p><div class="grid" style="grid-template-columns:repeat(3,1fr)">';
+ ICONS.forEach(function(i){h+='<button class="cat '+(d.icon===i?"sel":"")+'" onclick="V.d.icon=\''+i+'\';draw()"><span class="e" style="margin:0">'+i+'</span></button>'});
+ h+='</div><p class="hint">Quelle monnaie ?</p><div class="grid" style="grid-template-columns:repeat(4,1fr)">';
+ CURS.forEach(function(c){h+='<button class="cat '+(d.cur===c?"sel":"")+'" onclick="V.d.cur=\''+c+'\';draw()">'+c+'</button>'});
+ return h+'</div><div style="height:16px"></div><button class="btn ok" onclick="createFund()"><span class="e">✅</span> Créer</button>';
+}
+function createFund(){
+ if(!V.d.name.trim()){alert("Écris un nom 👆");return}
+ S.funds.push({id:"f"+Date.now(),name:V.d.name.trim(),icon:V.d.icon,cur:V.d.cur,tx:[]});save();go("home")
+}
+
+function fundPage(){
+ var f=fund(),b=bal(f),tin=0,tout=0;f.tx.forEach(function(t){t.type==="in"?tin+=t.amt:tout+=t.amt});
+ var h='<div class="top"><button class="round" onclick="go(\'home\')">‹</button><h1>'+f.icon+" "+esc(f.name)+'</h1></div>';
+ h+='<div class="balance"><div style="color:var(--mute)">Dans la caisse</div><div class="big '+(b<0?"neg":"pos")+'" style="font-size:42px">'+fmt(b,f.cur)+'</div><button class="round" style="width:auto;padding:0 18px;border-radius:30px" onclick="say(\'Il y a '+b+' dans la caisse\')">🔊 Écouter</button></div>';
+ h+='<div class="row2"><button class="btn in" onclick="start(\'in\')"><span class="e">⬇️</span> Entrée</button><button class="btn out" onclick="start(\'out\')"><span class="e">⬆️</span> Sortie</button></div>';
+ h+='<div class="hint">Total entré <b class="pos">'+fmt(tin)+'</b> &nbsp; Total sorti <b class="neg">'+fmt(tout)+'</b></div>';
+ if(!f.tx.length)h+='<p class="hint">Rien encore. Appuie sur Entrée ou Sortie.</p>';
+ f.tx.slice().reverse().forEach(function(t){
+  var cs=(t.type==="in"?CATS_IN:CATS_OUT).filter(function(c){return c[1]===t.cat})[0]||["❓",""];
+  h+='<div class="tx"><div class="ic '+t.type+'">'+cs[0]+'</div><div class="m"><div class="a '+(t.type==="in"?"pos":"neg")+'">'+(t.type==="in"?"+":"−")+fmt(t.amt,f.cur)+'</div><div class="d">'+t.cat+" · "+dt(t.ts)+(t.note?"<br>"+esc(t.note):"")+'</div></div><span class="p">'+(t.photo?'<span onclick="showPic(\''+t.id+'\')">📷</span> ':"")+(t.audio?'<span onclick="play(\''+t.id+'\')">▶️</span>':"")+'</span></div>'});
+ return h;
+}
+function findTx(id){var r=null;fund().tx.forEach(function(t){if(t.id===id)r=t});return r}
+function play(id){var t=findTx(id);if(t&&t.audio)new Audio(t.audio).play()}
+function showPic(id){var t=findTx(id),w=window.open();if(w){w.document.write('<img src="'+t.photo+'" style="max-width:100%">')}else alert("📷 Photo enregistrée")}
+
+function start(type){V.d={type:type,amt:"",cat:null,note:"",photo:null,audio:null,step:1};go("add")}
+function addPage(){
+ var d=V.d,f=fund(),isOut=d.type==="out",col=isOut?"out":"in";
+ var h='<button class="back" onclick="'+(d.step>1?"V.d.step--;draw()":"go(\'fund\')")+'">‹ Retour</button>';
+ h+='<div class="steps">'+[1,2,3,4].map(function(i){return '<i class="'+(i<=d.step?"on":"")+'"></i>'}).join("")+'</div>';
+ h+='<h1 class="'+(isOut?"neg":"pos")+'" style="margin:0 0 12px;text-align:center">'+(isOut?"⬆️ Sortie d\'argent":"⬇️ Entrée d\'argent")+'</h1>';
+ if(d.step===1){
+  h+='<div class="amt"><div style="color:var(--mute)">Combien ?</div><div class="big">'+(d.amt?fmt(+d.amt,f.cur):"0")+'</div></div><div class="keys">';
+  ["1","2","3","4","5","6","7","8","9","⌫","0","🔊"].forEach(function(k){h+='<button class="key" onclick="key(\''+k+'\')">'+k+'</button>'});
+  h+='</div><button class="btn '+col+'" onclick="next1()"><span class="e">👉</span> Suivant</button>';
+ }
+ if(d.step===2){
+  h+='<p class="hint">'+(isOut?"Pourquoi l\'argent sort ?":"D\'où vient l\'argent ?")+'</p><div class="grid">';
+  (isOut?CATS_OUT:CATS_IN).forEach(function(c){h+='<button class="cat '+(d.cat===c[1]?"sel":"")+'" onclick="V.d.cat=\''+c[1]+'\';V.d.step=3;draw();say(\''+c[1]+'\')"><span class="e">'+c[0]+'</span>'+c[1]+'</button>'});
+  h+='</div>';
+ }
+ if(d.step===3){
+  h+='<p class="hint">'+(isOut?"Preuve obligatoire : photo, voix ou mot":"Preuve (si tu peux)")+'</p>';
+  if(d.photo)h+='<img class="pic" src="'+d.photo+'">';
+  h+='<div class="proof"><label class="cat '+(d.photo?"done":"")+'" style="cursor:pointer"><span class="e">📷</span>'+(d.photo?"Photo ✅":"Photo")+'<input type="file" accept="image/*" capture="environment" hidden onchange="pick(this)"></label>';
+  h+='<button class="cat '+(d.audio?"done":(V.rec?"sel":""))+'" onclick="rec()"><span class="e">'+(V.rec?"⏹️":"🎤")+'</span>'+(V.rec?"Arrêter":(d.audio?"Voix ✅":"Parler"))+'</button></div>';
+  if(d.audio)h+='<button class="btn add" style="min-height:56px;margin-bottom:12px;font-size:20px" onclick="new Audio(V.d.audio).play()">▶️ Écouter ma voix</button>';
+  h+='<input type="text" placeholder="✏️ Un mot (facultatif)" value="'+esc(d.note)+'" oninput="V.d.note=this.value"><div style="height:14px"></div>';
+  h+='<button class="btn '+col+'" onclick="next3()"><span class="e">👉</span> Suivant</button>';
+ }
+ if(d.step===4){
+  var cs=(isOut?CATS_OUT:CATS_IN).filter(function(c){return c[1]===d.cat})[0];
+  h+='<div class="balance"><div class="big '+(isOut?"neg":"pos")+'">'+(isOut?"−":"+")+fmt(+d.amt,f.cur)+'</div><div style="font-size:60px">'+cs[0]+'</div><div style="font-weight:700">'+d.cat+'</div><div style="font-size:28px;margin-top:6px">'+(d.photo?"📷 ":"")+(d.audio?"🎤 ":"")+(d.note?"✏️":"")+'</div></div><div style="height:14px"></div>';
+  h+='<button class="btn ok" onclick="confirmTx()"><span class="e">✅</span> Oui, enregistrer</button><div style="height:10px"></div><button class="btn add" style="min-height:60px;font-size:20px;background:var(--card);color:var(--ink);border:2px solid var(--line)" onclick="go(\'fund\')">❌ Annuler</button>';
+ }
+ return h;
+}
+function key(k){
+ var d=V.d;
+ if(k==="⌫")d.amt=d.amt.slice(0,-1);
+ else if(k==="🔊"){say(d.amt?d.amt:"zéro");return}
+ else if(d.amt.length<9)d.amt=(d.amt+k).replace(/^0+/,"");
+ draw();
+}
+function next1(){if(!+V.d.amt){alert("Tape un montant 👆");return}V.d.step=2;draw();say(V.d.amt)}
+function next3(){
+ var d=V.d;if(V.rec)return;
+ if(d.type==="out"&&!d.photo&&!d.audio&&!d.note.trim()){alert("⚠️ Une sortie d'argent doit être justifiée : photo 📷, voix 🎤 ou un mot ✏️");return}
+ d.step=4;draw();
+}
+function pick(inp){
+ var fl=inp.files[0];if(!fl)return;
+ var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){
+  var s=Math.min(1,480/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*s;c.height=im.height*s;
+  c.getContext("2d").drawImage(im,0,0,c.width,c.height);V.d.photo=c.toDataURL("image/jpeg",.6);draw()};im.src=r.result};r.readAsDataURL(fl);
+}
+function rec(){
+ if(V.rec){V.rec.stop();return}
+ if(!navigator.mediaDevices||!window.MediaRecorder){alert("🎤 Micro non disponible. Écris un mot ✏️");return}
+ navigator.mediaDevices.getUserMedia({audio:true}).then(function(st){
+  var ch=[],m=new MediaRecorder(st);
+  m.ondataavailable=function(e){ch.push(e.data)};
+  m.onstop=function(){st.getTracks().forEach(function(t){t.stop()});clearTimeout(V.tm);V.rec=null;
+   var r=new FileReader();r.onload=function(){V.d.audio=r.result;draw()};r.readAsDataURL(new Blob(ch,{type:m.mimeType}))};
+  m.start();V.rec=m;V.tm=setTimeout(function(){if(V.rec)V.rec.stop()},15000);draw();
+ }).catch(function(){alert("🎤 Micro refusé. Écris un mot ✏️")});
+}
+function confirmTx(){
+ var d=V.d,f=fund();
+ f.tx.push({id:"t"+Date.now(),type:d.type,amt:+d.amt,cat:d.cat,note:d.note.trim(),photo:d.photo,audio:d.audio,ts:Date.now()});
+ if(!save()){var t=f.tx[f.tx.length-1];t.photo=null;t.audio=null;save()}
+ say(d.type==="in"?"Entrée enregistrée":"Sortie enregistrée");go("fund");
+}
+draw();
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("./sw.js").catch(function(){})})}
+</script>
+</body>
+</html>
