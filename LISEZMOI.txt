@@ -1,0 +1,21 @@
+MA CAISSE - publication sur GitHub Pages
+
+1. Sur github.com : New repository > nom "ma-caisse" > Public > Create.
+2. Add file > Upload files : déposez TOUS les fichiers ET le dossier "icons"
+   (index.html, manifest.json, sw.js, icons/icon-192.png, icons/icon-512.png).
+   Astuce : glissez le contenu du dossier, pas le dossier ma-caisse lui-même.
+3. Commit changes.
+4. Settings > Pages > Branch : main, / (root) > Save.
+5. Après quelques minutes : https://VOTRE-NOM.github.io/ma-caisse/
+
+INSTALLER SUR LE TELEPHONE
+- Android (Chrome) : menu ⋮ > "Installer l'application" ou "Ajouter à l'écran d'accueil".
+- iPhone (Safari) : bouton Partager > "Sur l'écran d'accueil".
+
+PUBS
+- Dans index.html, cherchez "EMPLACEMENT PUB" et collez-y le code AdSense
+  une fois votre compte validé (en général avec un nom de domaine à vous).
+
+MISE A JOUR
+- Quand vous modifiez index.html, changez aussi "ma-caisse-v1" en "ma-caisse-v2"
+  dans sw.js, sinon les téléphones gardent l'ancienne version.
